@@ -1,0 +1,98 @@
+#====================================
+#=============  common ===============
+#====================================
+info.app:
+  name: Nexwon Ladder Admin
+  description: SNexwon Ladder Admin
+  version: 1.0.0-snapshot
+
+---
+#====================================
+#=============== local ==============
+#====================================
+spring:
+  profiles: local
+ 
+### madcloud DataSource
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver   
+    url: jdbc:mysql://211.192.222.119/madcloud
+    username: root
+    password: hjsj0423
+    initial-size: 50
+    max-active: 200
+    max-idle: 100
+    min-idle: 50
+    max-wait: 10000
+    validationQuery: SELECT 1
+    
+#### logback set
+logging:
+  config: classpath:logback/logback-console.xml
+  level:
+    com.nexwon: DEBUG
+ 
+#### http port set
+server:
+  port: 8080
+
+---
+#==================================== 
+#============= development ==========
+#====================================
+spring:
+  profiles: development
+  
+### openData DataSource
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://211.192.222.119/madcloud
+    username: root
+    password: hjsj0423
+    initial-size: 50
+    max-active: 200
+    max-idle: 100
+    min-idle: 50
+    max-wait: 10000
+    validationQuery: SELECT 1
+    
+#### logback set
+logging:
+  config: classpath:logback/logback-service.xml 
+  level:
+    com.nexwon: INFO
+ 
+#### http port set
+server:
+  port: 80
+   
+---
+#====================================
+#============= production ===========
+#====================================
+spring:
+  profiles: production
+
+### openData DataSource
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://211.192.222.119/madcloud
+    username: root
+    password: hjsj0423
+    initial-size: 50
+    max-active: 200
+    max-idle: 100
+    min-idle: 50
+    max-wait: 10000
+    validationQuery: SELECT 1
+    
+#### logback set
+logging:
+  config: classpath:logback/logback-service.xml 
+  level:
+    com.nexwon: INFO
+ 
+#### http port set
+server:
+  port: 80
+  
