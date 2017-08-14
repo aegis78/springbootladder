@@ -42,6 +42,16 @@
         SELECT NOW()
     </select>
     
+    <select id="ladderList" parameterType="com.nexwon.admin.VO.ParamVO" resultMap="com.nexwon.admin.VO.LadderVO">
+        SELECT idx
+               , g_idx
+               , g_info
+               , g_time
+               , date
+          FROM LADDER
+         WHERE date between '${startDate} 00:00:00' and '${endDate} 23:59:59';
+    </select>
+    
     <!-- <select id="getLmnNmList" resultMap="LmnResultMap">
 		SELECT 
 			zip
