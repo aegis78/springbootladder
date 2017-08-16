@@ -28,5 +28,12 @@ public class LadderDAO {
     		return (ArrayList) sqlSession.selectList("ladder.ladderList", paramVO);
     }
 	
-
+	
+	public int getLadderListCount(ParamVO paramVO) {		
+    		return sqlSession.selectOne("ladder.ladderListCount", paramVO);
+    }
+	
+	public int insertLadder(LadderVO ladderVo) {
+		return sqlSession.insert("ladder.insertExcel", ladderVo);	
+	}
 }

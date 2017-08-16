@@ -1,5 +1,7 @@
 package com.nexwon.admin.controller;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.nexwon.admin.VO.LadderVO;
 import com.nexwon.admin.service.LadderService;
+import com.nexwon.admin.util.Util;
 
 @Controller
 public class LadderAdminController {
@@ -24,7 +28,29 @@ public class LadderAdminController {
 		
 	}
 	
+	@RequestMapping("/admin/index")
+	public String gameIndexList(Model model) {
+		
+		String today = Util.getTodayDate();
+		
+		ArrayList<LadderVO> ladderList = service.getLadderList(today, today);		
+		model.addAttribute("ladderList", ladderList);
+		
+		for (int i=0; i<ladderList.size(); i++) {
+			LadderVO  ladder = ladderList.get(i);
+			
+			logger.debug("gidx = {}", ladder.getIdx());
+			logger.debug("g_idx = {}", ladder.getG_idx());
+			logger.debug("g_info = {}", ladder.getG_info());
+			logger.debug("g_time = {}", ladder.getG_time());
+			
+		}
+		
+		return "admin/index";
+		
+	}
 	
 	
-
+	
+	
 }
