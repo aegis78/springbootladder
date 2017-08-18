@@ -11,8 +11,8 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nexwon.admin.VO.LadderVO;
 import com.nexwon.admin.dao.LadderDAO;
+import com.nexwon.admin.vo.LadderVO;
 
 import jxl.Cell;
 import jxl.Sheet;

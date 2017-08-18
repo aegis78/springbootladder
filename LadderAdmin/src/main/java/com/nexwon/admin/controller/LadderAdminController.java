@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.nexwon.admin.VO.LadderVO;
 import com.nexwon.admin.service.LadderService;
 import com.nexwon.admin.util.Util;
+import com.nexwon.admin.vo.LadderVO;
 
 @Controller
 public class LadderAdminController {
@@ -29,12 +30,18 @@ public class LadderAdminController {
 	}
 	
 	@RequestMapping("/admin/index")
-	public String gameIndexList(Model model) {
+	public String gameIndexList(Model model, @RequestParam(defaultValue = "", required = false) String searchDate) {
 		
 		String today = Util.getTodayDate();
 		
+		if ( !"".equals(searchDate) ) {
+			today = searchDate.trim();
+		}
+		
 		ArrayList<LadderVO> ladderList = service.getLadderList(today, today);		
 		model.addAttribute("ladderList", ladderList);
+		model.addAttribute("searchDate", today);
+		
 		
 		for (int i=0; i<ladderList.size(); i++) {
 			LadderVO  ladder = ladderList.get(i);

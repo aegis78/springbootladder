@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nexwon.admin.VO.LadderVO;
-import com.nexwon.admin.VO.ParamVO;
 import com.nexwon.admin.dao.LadderDAO;
+import com.nexwon.admin.vo.LadderVO;
+import com.nexwon.admin.vo.ParamVO;
 
 @Service
 public class LadderService {

@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.nexwon.admin.VO.LadderVO;
-import com.nexwon.admin.VO.ParamVO;
+import com.nexwon.admin.vo.LadderVO;
+import com.nexwon.admin.vo.ParamVO;
 
 
 @Repository
@@ -35,5 +35,13 @@ public class LadderDAO {
 	
 	public int insertLadder(LadderVO ladderVo) {
 		return sqlSession.insert("ladder.insertExcel", ladderVo);	
+	}
+	
+	public int deleteData(ParamVO paramVo) {
+		return sqlSession.delete("ladder.deleteData", paramVo);
+	}
+	
+	public int updateData(LadderVO ladderVo) {
+		return sqlSession.update("ladder.updateData", ladderVo);
 	}
 }

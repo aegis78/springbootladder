@@ -1,4 +1,4 @@
-package com.nexwon.admin.VO;
+package com.nexwon.admin.vo;
 
 public class ParamVO {
 	

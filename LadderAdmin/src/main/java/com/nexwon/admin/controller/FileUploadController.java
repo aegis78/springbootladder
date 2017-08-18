@@ -51,6 +51,8 @@ public class FileUploadController {
 		try {
 			String fileNm = uploadfile.getOriginalFilename();
 			String filePath = UPLOADPATH + File.separator + fileNm;
+			
+			//if ( !"xls".equals(fileNm.split(".")[1]) ) throw new Exception();
 
 			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
 			stream.write(uploadfile.getBytes());
@@ -72,17 +74,42 @@ public class FileUploadController {
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
-	/**
-	 * 
-	 * @return HTTP Response
-	 */
-	@RequestMapping(value = "/excelParse", method = RequestMethod.POST)
-	public ResponseEntity<?> excelParse() {
+	
+	@RequestMapping(value = "/deleteData", method = RequestMethod.POST)
+	public ResponseEntity<?> deleteData(@RequestParam("deleteDate") String deleteDate) {
+		
+		try {
+			excelService.deleteData(deleteDate);
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			
+		}
 		
 		
+		
+		logger.info("DELETE_Date == {}", deleteDate );
 		return new ResponseEntity<>(HttpStatus.OK);
-
 	}
+	
+	@RequestMapping(value = "/gInfoModify", method = RequestMethod.POST)
+	public ResponseEntity<?> updateData(@RequestParam("idx") int idx, @RequestParam("gInfo") String gInfo) {
+		
+		try {
+			excelService.updateData(idx, gInfo);
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			
+		}
+		
+		
+		
+		logger.info("UPDATE_Date == idx : {} ==== gInfo : {}", idx, gInfo );
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 
 }

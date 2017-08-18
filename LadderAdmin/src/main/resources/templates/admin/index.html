@@ -8,6 +8,9 @@
 <title>ADWARD ADMIN</title>
 <link rel="stylesheet"
 	href="/webjars/bootstrap/3.3.4/dist/css/bootstrap.min.css" />
+
+<link rel="stylesheet"
+	href="/webjars/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" />
 <style>
 /*
  * Globals
@@ -181,8 +184,25 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
 
 	<div class="blog-header">
 		<div class="container">
+			날짜를 선택해 주세요
+			<form id="dateSearchFrm">
+				<input type="text" data-date-format="yyyy-mm-dd" id="searchDate"
+					name="searchDate" />&nbsp;&nbsp;&nbsp;
+				<button type="button" class="btn btn-primary" id="searchBtn">검색</button>
+			</form>
+			<br />
+			<div>
+				현재 검색된 날짜는 : <b><span id="date" th:text="${searchDate}"></span></b>&nbsp;&nbsp;
+				<button type="button" class="btn btn-primary" id="deleteBtn">삭제</button>
+			</div>
 
-			<p class="lead blog-description">Chrome 전용 입니다.</p>
+
+
+
+		</div>
+	</div>
+	<div class="blog-header">
+		<div class="container">
 			<form id="upload_file_frm" onsubmit="return false;">
 				<table>
 					<tr>
@@ -213,14 +233,25 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
 						<th>게임 시간</th>
 						<th>게임 정보</th>
 						<th>입력 날짜</th>
+						<th>수정</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="ladder : ${ladderList}">
 						<th th:text="${ladder.g_idx}" scope="row"></th>
 						<td th:text="${ladder.g_time}"></td>
-						<td th:text="${ladder.g_info}"></td>
+						<td>
+							<select class="select" name="g_info" th:id="${ladder.idx}">
+								<option value="1,3,B" th:selected="${ladder.g_info == '1,3,B'}">1,3,B</option>
+								<option value="1,4,A" th:selected="${ladder.g_info == '1,4,A'}">1,4,A</option>
+								<option value="2,3,A" th:selected="${ladder.g_info == '2,3,A'}">2,3,A</option>
+								<option value="2,4,B" th:selected="${ladder.g_info == '2,4,B'}">2,4,B</option>
+							</select>
+						</td>
 						<td th:text="${ladder.date}"></td>
+						<td><button name="modifyBtn" th:value="${ladder.idx}"
+								type="button" class="btn btn-danger">수정</button></td>
+
 					</tr>
 				</tbody>
 			</table>
@@ -239,14 +270,15 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
 						<h4>성공적으로 업로드 되었습니다.</h4>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" id="successModalClose">Close</button>
+						<button type="button" class="btn btn-default"
+							id="successModalClose">Close</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		
-		<div class="modal fade" id="excelUploadModal" tabindex="-1" role="dialog"
-			aria-labelledby="smallModal" aria-hidden="true">
+
+		<div class="modal fade" id="excelUploadModal" tabindex="-1"
+			role="dialog" aria-labelledby="smallModal" aria-hidden="true">
 			<div class="modal-dialog modal-sm">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -255,11 +287,13 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
 						<h4 class="modal-title" id="myModalLabel">Message</h4>
 					</div>
 					<div class="modal-body">
-						<h4>이미 업로드 하셨다면 중복적용 될수 있습니다.</h4><br/>
+						<h4>이미 업로드 하셨다면 중복적용 될수 있습니다.</h4>
+						<br />
 						<h4>정말 업로드 하시겠습니까?</h4>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" id="excelUploadModalClose">Close</button>
+						<button type="button" class="btn btn-default"
+							id="excelUploadModalClose">Close</button>
 						<button type="button" class="btn btn-primary" id="excelUpload">Upload</button>
 					</div>
 				</div>
@@ -268,11 +302,15 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
 
 	</div>
 
-	<script src="/webjars/jquery/2.1.3/dist/jquery.min.js"></script>
-	<script src="/webjars/bootstrap/3.3.4/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+		src="/webjars/jquery/2.1.3/dist/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="/webjars/bootstrap/3.3.4/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+		src="/webjars/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	$(document).ready(function(){
 		$("#upload_file_btn").click(function(){
 			//uploadFileFunc();
@@ -295,10 +333,30 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
 		$("#excelUpload").click(function(){
 			$("#excelUploadModal").modal('hide');
 			uploadFileFunc();
-		});		
+		});	
+		
+		$("#searchBtn").click(function(){
+			searchDate();
+			
+		});
+		
+		$("#deleteBtn").click(function(){
+			if (confirm('정말 삭제하시겠습니까?')) {
+				deleteData();
+			}
+			
+		});	
+		
+		$("button[name=modifyBtn]").click(function(){
+			if (confirm('정말 수정 하시겠습니까?')) {
+				var idx = $(this).attr("value");				
+				var gInfo = $("#" + idx + " option:selected").val();
+				gInfoModify(idx, gInfo);
+			}
+		});
 	});
 	
-	function uploadFileFunc(){
+	function uploadFileFunc() {
 		$.ajax({
 			url:"/fileupload",
 			type: "POST",
@@ -314,10 +372,70 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
 	        },
 	        error: function () {
 	            $("#uload_result_msg").text("File Upload Error");
+	            alert('엑셀 업로드 실패 했습니다. 컬럼 형식을 모두 텍스트로 변경 부탁드립니다.')
 	            location.reload();
 	        }
 		});
 	}
+	
+	function searchDate() {
+		
+		var searchDate = $('#searchDate').val();
+		if( searchDate == '') {
+			alert('날짜를 선택해 주세요!!')
+			return false;
+		}
+		
+		$('#dateSearchFrm').submit();
+		
+	}
+	
+	function gInfoModify(pIdx, pGinfo) {
+				
+		$.ajax({
+			url:"/gInfoModify",
+			type: "POST",
+			data: {idx: pIdx, gInfo: pGinfo},		        
+	        success: function () {
+	            alert("성공적으로 수정 되었습니다.")
+	            location.reload();
+	            
+	        },
+	        error: function () {
+	            alert("수정 실패하였습니다. 다시 시도해 주세요")
+	            location.reload();
+	        }
+		});
+		
+	}
+	
+	$('#searchDate').datepicker({
+		autoclose: true
+	});
+	
+</script>
+
+<script th:inline="javascript">
+	function deleteData() {
+		
+		var params = "deleteDate=" + [[${searchDate}]];
+	
+		$.ajax({
+			url:"/deleteData",
+			type: "POST",
+			data: params,		        
+	        success: function () {
+	            alert("성공적으로 삭제 되었습니다.")
+	            location.reload();
+	            
+	        },
+	        error: function () {
+	            alert("삭제 실패하였습니다. 다시 시도해 주세")
+	            location.reload();
+	        }
+		});
+	}
+	
 	
 </script>
 </body>

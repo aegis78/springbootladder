@@ -9,9 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nexwon.admin.VO.LadderVO;
 import com.nexwon.admin.dao.LadderDAO;
 import com.nexwon.admin.util.Util;
+import com.nexwon.admin.vo.LadderVO;
+import com.nexwon.admin.vo.ParamVO;
 
 import jxl.read.biff.BiffException;
 
@@ -45,6 +46,30 @@ public class ExcelService {
 		return resultCount;
 		
 				
+	}
+	
+	public int deleteData(String date) {
+		int resultCount = 0;
+		
+		ParamVO paramVo = new ParamVO();
+		
+		paramVo.setStartDate(date);
+		resultCount = ladderDao.deleteData(paramVo);
+		
+		return resultCount;
+	}
+	
+	public int updateData(int idx, String gInfo) {
+		int resultCount = 0;
+		
+		LadderVO ladderVo = new LadderVO();
+		
+		ladderVo.setIdx(idx);
+		ladderVo.setG_info(gInfo);
+		
+		resultCount = ladderDao.updateData(ladderVo);
+		
+		return resultCount;
 	}
 
 }
